@@ -21,7 +21,6 @@ namespace MarketingTask.Controllers
             _mapper = mapper;
         }
 
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

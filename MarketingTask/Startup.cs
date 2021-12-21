@@ -2,6 +2,7 @@ using MarketingTask.Configurations;
 using MarketingTask.Data;
 using MarketingTask.IRepository;
 using MarketingTask.Repository;
+using MarketingTask.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -58,6 +59,7 @@ namespace MarketingTask
             }
 
             app.UseHttpsRedirection();
+            app.ConfigureExeptionHandler();
             app.UseCors("AllowAll");
 
             app.UseRouting();

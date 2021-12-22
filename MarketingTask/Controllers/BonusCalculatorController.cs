@@ -3,6 +3,7 @@ using MarketingTask.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MarketingTask.Controllers
@@ -12,28 +13,34 @@ namespace MarketingTask.Controllers
     public class BonusCalculatorController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public BonusCalculatorController(IUnitOfWork unitOfWork, IMapper mapper)
+        public BonusCalculatorController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public async Task<IActionResult> CreateDistributor([FromBody] DateTime startDate, DateTime endDate)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var bonus = _mapper.Map<Distributor>(createDistributorDto);
-        //    await _unitOfWork.Distributors.Get(distributor);
-        //    await _unitOfWork.Save();
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CalculateBonus(DateTime startDate, DateTime endDate)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    return CreatedAtRoute("GetDistributor", new { id = distributor.Id }, distributor);
-        //}
+            decimal bonus = 0;
+            var distributorSales = await _unitOfWork.DistributorSales.GetAll(d => startDate < d.SaleDate && d.SaleDate < endDate);
+
+            if (distributorSales.Any())
+            {
+                foreach (var item in distributorSales)
+                {
+                    bonus += item.TotalSoldAmount;
+                }
+            }
+
+            return Ok(bonus);
+        }
     }
 }

@@ -5,6 +5,7 @@ using MarketingTask.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MarketingTask.Controllers
@@ -50,6 +51,14 @@ namespace MarketingTask.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            var distributors = (await _unitOfWork.Distributors.GetAll());   
+            if (distributors.Any())
+            {
+                if (distributors.Where(d => d.ParentId == createDistributorDto.ParentId).Count() >= 3)
+                {
+                    return BadRequest("This distributor Can't have, More recomended Coworkers");
+                }
             }
             var distributor = _mapper.Map<Distributor>(createDistributorDto);
             await _unitOfWork.Distributors.Insert(distributor);

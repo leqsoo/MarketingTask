@@ -59,7 +59,7 @@ namespace MarketingTask
             }
 
             app.UseHttpsRedirection();
-            app.ConfigureExeptionHandler();
+            //app.ConfigureExeptionHandler();
             app.UseCors("AllowAll");
 
             app.UseRouting();

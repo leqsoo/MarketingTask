@@ -13,6 +13,8 @@ namespace MarketingTask.Data
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
+        public long? ParentId { get; set; }
+
         /// <summary>
         /// სახელი - აუცილებელი, max 50 სიმბოლო.
         /// </summary>
@@ -41,7 +43,7 @@ namespace MarketingTask.Data
         /// <summary>
         /// სურათი.
         /// </summary>
-        public byte[] Photo { get; set; }
+        //public byte[] Photo { get; set; }
 
         #region Personal Identification Information
         public string DocumentType { get; set; }

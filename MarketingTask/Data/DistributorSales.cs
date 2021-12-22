@@ -16,5 +16,9 @@ namespace MarketingTask.Data
         [ForeignKey(nameof(Product))]
         public long ProductId { get; set; }
         public Product Product { get; set; }
+
+        public decimal TotalSoldProductPrice { get; set; }
+
+        public decimal TotalSoldAmount { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using MarketingTask.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MarketingTask.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211221185359_Mt")]
+    partial class Mt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,9 +108,6 @@ namespace MarketingTask.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("TotalSoldAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalSoldProductPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");

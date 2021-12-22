@@ -8,6 +8,8 @@ namespace MarketingTask.Models
     }
     public class CreateDistributorDto
     {
+        public long? ParentId { get; set; }
+
         /// <summary>
         /// სახელი - აუცილებელი, max 50 სიმბოლო.
         /// </summary>
@@ -36,7 +38,7 @@ namespace MarketingTask.Models
         /// <summary>
         /// სურათი.
         /// </summary>
-        public byte[] Photo { get; set; }
+        //public byte[] Photo { get; set; }
 
         #region Personal Identification Information
         public string DocumentType { get; set; }

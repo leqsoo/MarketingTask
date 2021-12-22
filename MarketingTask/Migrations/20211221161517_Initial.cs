@@ -13,11 +13,11 @@ namespace MarketingTask.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SurName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     DocumentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DocumentSeria = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     DocumentNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),

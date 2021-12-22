@@ -13,6 +13,7 @@ namespace MarketingTask.Repository
         private readonly ApplicationDbContext _databaseContext;
         private IGenericRepository<Product> _products;
         private IGenericRepository<Distributor> _distributors;
+        private IGenericRepository<DistributorSales> _distributorsSales;
 
         public UnitOfWork(ApplicationDbContext databaseContext)
         {
@@ -22,6 +23,8 @@ namespace MarketingTask.Repository
         public IGenericRepository<Product> Products => _products ??= new GenericRepository<Product>(_databaseContext);
 
         public IGenericRepository<Distributor> Distributors => _distributors ??= new GenericRepository<Distributor>(_databaseContext);
+
+        public IGenericRepository<DistributorSales> DistributorSales => _distributorsSales ??= new GenericRepository<DistributorSales>(_databaseContext);
 
         public void Dispose()
         {

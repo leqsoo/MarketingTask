@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MarketingTask.Data;
+﻿using MarketingTask.Data;
 using MarketingTask.IRepository;
 using Microsoft.EntityFrameworkCore;
-using MarketingTask.Repository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace MarketingTask.GenericRepository
 {
@@ -84,6 +83,14 @@ namespace MarketingTask.GenericRepository
         {
             _dbSet.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
+        }
+        public void UpdateRange(IEnumerable<T> entities)
+        {
+            _dbSet.AttachRange(entities);
+            foreach (var entity in entities)
+            {
+                _context.Entry(entity).State = EntityState.Modified;
+            }
         }
     }
 }

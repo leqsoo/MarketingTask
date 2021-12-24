@@ -24,5 +24,7 @@ namespace MarketingTask.IRepository
         void DeleteRange(IEnumerable<T> entities);
 
         void Update(T entity);
+
+        void UpdateRange(IEnumerable<T> entities);
     }
 }

@@ -12,5 +12,6 @@ namespace MarketingTask.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Distributor> Distributors { get; set; }
         public DbSet<DistributorSales> DistributorSales { get; set; }
+        public DbSet<Bonus> Bonuses { get; set; }
     }
 }

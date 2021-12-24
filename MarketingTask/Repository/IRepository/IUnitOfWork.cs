@@ -11,6 +11,7 @@ namespace MarketingTask.IRepository
         IGenericRepository<Product> Products { get; }
         IGenericRepository<Distributor> Distributors { get; }
         IGenericRepository<DistributorSales> DistributorSales { get; }
+        IGenericRepository<Bonus> Bonuses { get; }
         Task Save();
     }
 }

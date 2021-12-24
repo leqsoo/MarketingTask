@@ -20,5 +20,7 @@ namespace MarketingTask.Data
         public decimal TotalSoldProductPrice { get; set; }
 
         public decimal TotalSoldAmount { get; set; }
+
+        public bool IsUsedForBonusCalculation { get; set; }
     }
 }

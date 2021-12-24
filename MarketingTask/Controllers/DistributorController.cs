@@ -2,6 +2,7 @@
 using MarketingTask.Data;
 using MarketingTask.IRepository;
 using MarketingTask.Models;
+using MarketingTask.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -52,15 +53,20 @@ namespace MarketingTask.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var distributors = (await _unitOfWork.Distributors.GetAll());   
+            var distributors = (await _unitOfWork.Distributors.GetAll());
             if (distributors.Any())
             {
-                if (distributors.Where(d => d.ParentId == createDistributorDto.ParentId).Count() >= 3)
+                if (distributors.Count(d => d.ParentId == createDistributorDto.ParentId && d.ParentId > 0) == 3)
                 {
                     return BadRequest("This distributor Can't have, More recomended Coworkers");
                 }
+                var level = Utilities.GetLevel(distributors, createDistributorDto.ParentId);
+                if (level > 5)
+                {
+                    return BadRequest("Maximum level 5 depth reached!");
+                }
             }
-            var distributor = _mapper.Map<Distributor>(createDistributorDto);
+            var distributor = (Distributor)_mapper.Map<Distributor>(createDistributorDto);
             await _unitOfWork.Distributors.Insert(distributor);
             await _unitOfWork.Save();
 
@@ -80,7 +86,20 @@ namespace MarketingTask.Controllers
             var distributor = await _unitOfWork.Distributors.Get(c => c.Id == id);
             if (distributor == null)
             {
-                return BadRequest("Submited Date is invalid");
+                return BadRequest("Submited Data is invalid");
+            }
+            var distributors = (await _unitOfWork.Distributors.GetAll());
+            if (distributors.Any())
+            {
+                if (distributors.Count(d => d.ParentId == distributor.ParentId) == 3)
+                {
+                    return BadRequest("This distributor Can't have, More recomended Coworkers");
+                }
+                var level = Utilities.GetLevel(distributors, distributor.ParentId);
+                if (level > 5)
+                {
+                    return BadRequest("Maximum level 5 depth reached!");
+                }
             }
             _mapper.Map(DistributorDto, distributor);
             _unitOfWork.Distributors.Update(distributor);

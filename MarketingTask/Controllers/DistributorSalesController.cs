@@ -4,6 +4,8 @@ using MarketingTask.IRepository;
 using MarketingTask.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,10 +26,10 @@ namespace MarketingTask.Controllers
         [HttpGet("{id:int}", Name = "GetDistributorSales")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetDistributorSales(long id)
+        public async Task<IActionResult> GetDistributorSales(long distributorId, DateTime saleDate)
         {
-            var distributorSales = await _unitOfWork.DistributorSales.Get(c => c.Id == id);
-            var result = _mapper.Map<DistributorSalesDto>(distributorSales);
+            var distributorSales = await _unitOfWork.DistributorSales.GetAll(c => c.DistributorId == distributorId && c.SaleDate == saleDate);
+            var result = _mapper.Map<List<DistributorSalesDto>>(distributorSales);
             return Ok(result);
         }
 

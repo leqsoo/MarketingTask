@@ -20,6 +20,35 @@ namespace MarketingTask.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetBonuses(string name, string surname, decimal? minbonus, decimal? maxbonus)
+        {
+            IList<Bonus> distributorBonuses = new List<Bonus>();
+            if (!string.IsNullOrEmpty(name))
+            {
+                distributorBonuses = await _unitOfWork.Bonuses.GetAll(d => d.Distributor.Name == name, 
+                    includes: new List<string> { "Distributor" });
+            }
+            if (!string.IsNullOrEmpty(surname))
+            {
+                distributorBonuses = await _unitOfWork.Bonuses.GetAll(d => d.Distributor.SurName == surname,
+                    includes: new List<string> { "Distributor" });
+            }
+            if (minbonus != null)
+            {
+                distributorBonuses = await _unitOfWork.Bonuses.GetAll(d => minbonus > d.BonusAmount,
+                includes: new List<string> { "Distributor" });
+            }
+            if (maxbonus != null)
+            {
+                distributorBonuses = await _unitOfWork.Bonuses.GetAll(d => maxbonus < d.BonusAmount,
+                    includes: new List<string> { "Distributor" });
+            }
+            return Ok(distributorBonuses);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]

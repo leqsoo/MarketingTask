@@ -23,12 +23,37 @@ namespace MarketingTask.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id:int}", Name = "GetDistributorSales")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetDistributorSales(long distributorId, DateTime saleDate)
+        public async Task<IActionResult> GetDistributorSales(long distributorId, DateTime? saleDate, long productId)
         {
-            var distributorSales = await _unitOfWork.DistributorSales.GetAll(c => c.DistributorId == distributorId && c.SaleDate == saleDate);
+            IList<DistributorSales> distributorSales = new List<DistributorSales>();
+            if (distributorId > 0)
+            {
+                distributorSales = await _unitOfWork.DistributorSales.GetAll(d => d.DistributorId == distributorId,
+                    includes: new List<string> { "Distributor" });
+            }
+            if (productId > 0)
+            {
+                distributorSales = await _unitOfWork.DistributorSales.GetAll(d => d.ProductId == productId,
+                    includes: new List<string> { "Product" });
+            }
+            if (saleDate != null)
+            {
+                distributorSales = await _unitOfWork.DistributorSales.GetAll(d => d.SaleDate == saleDate,
+                    includes: new List<string> { "Product", "Distributor" });
+            }
+            var results = _mapper.Map<List<DistributorSalesDto>>(distributorSales);
+            return Ok(results);
+        }
+
+        [HttpGet("{id:int}", Name = "GetDistributorSale")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetDistributorSale(long id)
+        {
+            var distributorSales = await _unitOfWork.DistributorSales.GetAll(d => d.Id == id);
             var result = _mapper.Map<List<DistributorSalesDto>>(distributorSales);
             return Ok(result);
         }
@@ -47,7 +72,7 @@ namespace MarketingTask.Controllers
             await _unitOfWork.DistributorSales.Insert(distributorSales);
             await _unitOfWork.Save();
 
-            return CreatedAtRoute("GetDistributorSales", new { id = distributorSales.Id }, distributorSales);
+            return CreatedAtRoute("GetDistributorSale", new { id = distributorSales.Id }, distributorSales);
         }
     }
 }
